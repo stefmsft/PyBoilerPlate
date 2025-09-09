@@ -64,7 +64,14 @@ cd my-existing-project
 # Clone your existing project (this will merge the boilerplate files)
 git clone <your-existing-repo-url> .
 
-# Start coding!
+# If your existing project has a requirements.txt, migrate to uv:
+uv add --requirements requirements.txt  # Adds all packages to pyproject.toml
+rm requirements.txt  # Optional: remove the old file
+
+# Sync the environment with all dependencies
+uv sync
+
+# Your virtual environment is now ready! Start coding.
 ```
 
 ## 📁 Project Structure
@@ -84,9 +91,66 @@ your-project/
 └── HOW2USEIT.md           # This file
 ```
 
+## 🔄 Migrating from requirements.txt
+
+If you have an existing Python project with a `requirements.txt` file, here's how to migrate it to use uv and this boilerplate:
+
+```bash
+# After setting up the boilerplate (option 2) and cloning your existing project
+
+# Migrate your requirements.txt to pyproject.toml
+uv add --requirements requirements.txt
+
+# For development dependencies (if you have requirements-dev.txt or similar):
+uv add --dev --requirements requirements-dev.txt
+
+# Remove old requirement files (optional)
+rm requirements.txt requirements-dev.txt
+
+# Sync to ensure everything is installed
+uv sync
+
+# Your project is now fully migrated to uv!
+```
+
+**Benefits of migrating to uv:**
+- Faster dependency resolution and installation
+- Built-in virtual environment management
+- Modern pyproject.toml-based configuration
+- Automatic dependency locking with uv.lock
+- Better dependency conflict resolution
+
 ## 🔧 Development Workflow
 
-### 1. Activate Your Environment
+### 1. Daily Development - Getting Started
+
+**After the initial setup, when you come back to code:**
+
+```bash
+# Navigate to your project
+cd my-project
+
+# Option A: Use uv to run commands (recommended - no activation needed)
+uv run pytest                    # Run tests
+uv run python src/mymodule.py   # Run your code
+uv add requests                  # Add new dependencies
+
+# Option B: Activate the virtual environment manually
+source .venv/bin/activate        # Linux/macOS
+# or
+.venv\Scripts\activate           # Windows
+
+# Then use regular commands
+pytest
+python src/mymodule.py
+```
+
+**Key points:**
+- The `.venv` virtual environment is created during setup but not automatically activated
+- Use `uv run <command>` to run commands in the virtual environment without activating
+- Or manually activate the environment if you prefer traditional workflow
+
+### 2. Environment Activation (Manual Method)
 
 **Linux/macOS:**
 ```bash
